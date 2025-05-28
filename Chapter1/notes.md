@@ -55,6 +55,20 @@ and instantly you realize that fib(4) will call fib(3) and fib(2), but fib(3) wi
 The fibonacci sequence is simply easier to understand, which is why it's often used as an example, 
 however, even the book states that it is generally a bad idea to use recursion for simple math functions, such as fibonacci.
 # 1.4 C++ Classes
+## Basic class Syntax
+Classes have members and member functions. Each instance of a class is an object. You can declar members and member functions as
+either public or private. Public means anything in the program can access them. Private means only member functions of the class can access
+them. Normally, you will see data members set to private and member functions set to public, in order for the class to be useable
+by other parts of the program, without needing to know the internal details of that class. Classes also have constructors, which essentially
+initializes the data members of that class. A class will always have a default constructor if none is defined and will initialize the data members
+using language defaults.
+## Extra Constructor Syntax and Accessors
+Constructors with no parameters are called default constructors.  
+An initializer list can be used to initialize values in the constructor definition. For example, if a data member is a const, only an initializer list
+can set its value, not the constructor definition. Initializer lists can also be used in inheritance heirarchies, like if a derived class's base class 
+does not have a default constructor, only an overloaded constructor.  
+A constructor with parameters is known as an overloaded constructor.
+
 # 1.5 C++ Details
 # 1.6 Templates
 # 1.7 Using Matrices
