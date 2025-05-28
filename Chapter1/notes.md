@@ -18,7 +18,7 @@ $\displaystyle\sum_{i=0}^N A^i \leq \frac{1}{1-A}$
 Arithmetic Series: $\displaystyle\sum_{i=1}^N i = \frac{N(N+1)}{2} \approx \frac{N^2}{2}$  
 $\displaystyle\sum_{i=1}^N i^2 = \frac{N(N+1)(2N+1)}{6} \approx \frac{N^3}{3}$  
 $\displaystyle\sum_{i=1}^N i^k \approx \frac{N^{k+1}}{|k+1|}$, $k\neq-1$  
-$H_N = \displaystyle\sum_{i=1}^N \frac{1}{i} \approx$ log$_eN$  
+$H_N = \sum_{i=1}^N \frac{1}{i} \approx \log_e N$  
 $\displaystyle\sum_{i=1}^N f(N)=Nf(N)$  
 $\displaystyle\sum_{i=n_0}^N f(i)=\displaystyle\sum_{i=1}^N f(i) - \displaystyle\sum_{i=1}^{n_0-1} f(i)$
 ## Modular Arithmetic
@@ -35,6 +35,25 @@ Prove a base case, assume an inductive hypothesis, then use these two premises t
 ### Proof by Contradiction
 Prove that some known property of a theorem is false, which proves the entire theorem is false.
 # 1.3 A Brief Introduction to Recursion
+Recursion is when a function calls itself. There are a few rules to this, but first here is an example using the
+fibonacci sequence.  
+int fib (int x)  
+{  
+    if (x <= 1) {return x;}  
+    return fib(x-2) + fib(x-1);  
+}  
+This program calculates the xth term of the Fibonacci sequence using recursion. 
+The first line is part of the first rule of recursion, which is called the **base case**. 
+The trick to recursion is for a function to call itself until it gets to a value that is known which, in this case, is 0 and 1, which are the first two terms of the fibonacci sequence. 
+Until x gets to those values, it will call itself over and over again. This is what the second line does, and is also the second rule of recursion: **making progress**. 
+The function, no matter how big x is, will always make it to the base case. Also, every recursive call works for all positive integers greater than or equal to 0, as that's the range for fibonacci. 
+However, even if the function were to be called with a negative number, it would not run indefinetely and crash the program. This is part of the **design rule**, the third rule of recursion. 
+The last rule of recursion is the **compound interest rule**, which essentially states that you shouldn't duplicate work by solving the same problem in a seperate recursive call. 
+Clearly, this function does not follow that, and is why it has such a bad run time ($2^n$). 
+To understand how this function does not follow that, you can plug in any integer, say 4, 
+and instantly you realize that fib(4) will call fib(3) and fib(2), but fib(3) will call fib(2) and fib(1), hence solving fib(2) twice. 
+The fibonacci sequence is simply easier to understand, which is why it's often used as an example, 
+however, even the book states that it is generally a bad idea to use recursion for simple math functions, such as fibonacci.
 # 1.4 C++ Classes
 # 1.5 C++ Details
 # 1.6 Templates
