@@ -76,6 +76,12 @@ Member functions have two types, accessors and mutators. Mutators are member fun
 modifying its data members. Accessors do not change the state of the object, but examine it. For example a member function that retrieves
 information from a certain data member of a class is an accessor, and a member function that changes that data member is a mutator. To mark
 a member function as an accessor, you use the const keyword, as it does not modify any data members.
+## Seperation of Interface and Implementation
+In C++, class implementation is normally seperated from the declaration/interface. The interface lists all member functions and data members in a header
+file, while the implementation is in a seperate cpp file. For the interface, header guards are included to prevent the implementation
+from including a second header file. In the implementation, the header file must be included in order to access the knowledge of the interface.
+In the implementation file, the scope resolution operator is included in function definitions in order to specify which class it is a part of. 
+The function signatures must also match exactly, including name, parameters, and return type, in order for the member function to be properly implemented.
 # 1.5 C++ Details
 # 1.6 Templates
 # 1.7 Using Matrices
