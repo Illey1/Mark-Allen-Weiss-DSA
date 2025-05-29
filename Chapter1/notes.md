@@ -47,8 +47,8 @@ The first line is part of the first rule of recursion, which is called the **bas
 The trick to recursion is for a function to call itself until it gets to a value that is known which, in this case, is 0 and 1, which are the first two terms of the fibonacci sequence. 
 Until x gets to those values, it will call itself over and over again. This is what the second line does, and is also the second rule of recursion: **making progress**. 
 The function, no matter how big x is, will always make it to the base case. Also, every recursive call works for all positive integers greater than or equal to 0, as that's the range for fibonacci. 
-However, even if the function were to be called with a negative number, it would not run indefinetely and crash the program. This is part of the **design rule**, the third rule of recursion. 
-The last rule of recursion is the **compound interest rule**, which essentially states that you shouldn't duplicate work by solving the same problem in a seperate recursive call. 
+However, even if the function were to be called with a negative number, it would not run indefinitely and crash the program. This is part of the **design rule**, the third rule of recursion. 
+The last rule of recursion is the **compound interest rule**, which essentially states that you shouldn't duplicate work by solving the same problem in a separate recursive call. 
 Clearly, this function does not follow that, and is why it has such a bad run time ($2^n$). 
 To understand how this function does not follow that, you can plug in any integer, say 4, 
 and instantly you realize that fib(4) will call fib(3) and fib(2), but fib(3) will call fib(2) and fib(1), hence solving fib(2) twice. 
@@ -56,19 +56,26 @@ The fibonacci sequence is simply easier to understand, which is why it's often u
 however, even the book states that it is generally a bad idea to use recursion for simple math functions, such as fibonacci.
 # 1.4 C++ Classes
 ## Basic class Syntax
-Classes have members and member functions. Each instance of a class is an object. You can declar members and member functions as
+Classes have members and member functions. Each instance of a class is an object. You can declare members and member functions as
 either public or private. Public means anything in the program can access them. Private means only member functions of the class can access
-them. Normally, you will see data members set to private and member functions set to public, in order for the class to be useable
+them. Normally, you will see data members set to private and member functions set to public, in order for the class to be usable
 by other parts of the program, without needing to know the internal details of that class. Classes also have constructors, which essentially
 initializes the data members of that class. A class will always have a default constructor if none is defined and will initialize the data members
 using language defaults.
 ## Extra Constructor Syntax and Accessors
 Constructors with no parameters are called default constructors.  
 An initializer list can be used to initialize values in the constructor definition. For example, if a data member is a const, only an initializer list
-can set its value, not the constructor definition. Initializer lists can also be used in inheritance heirarchies, like if a derived class's base class 
+can set its value, not the constructor definition. Initializer lists can also be used in inheritance hierarchies, like if a derived class's base class 
 does not have a default constructor, only an overloaded constructor.  
-A constructor with parameters is known as an overloaded constructor.
-
+A constructor with parameters is known as an overloaded constructor.  
+An initialization list is a way to initialize data members directly, rather than using the constructor's body. It helps save time for when data members consist of other classes. 
+Another use case is when a derived class's base class does not have a default constructor.  
+Whenever a constructor has one parameter, it is important to make it explicit to avoid implicit type conversions. If you declare a constructor
+explicit, the compiler will not do this type conversion and complain about a type mismatch, preventing undefined behavior.  
+Member functions have two types, accessors and mutators. Mutators are member functions that change the state of the object, directly 
+modifying its data members. Accessors do not change the state of the object, but examine it. For example a member function that retrieves
+information from a certain data member of a class is an accessor, and a member function that changes that data member is a mutator. To mark
+a member function as an accessor, you use the const keyword, as it does not modify any data members.
 # 1.5 C++ Details
 # 1.6 Templates
 # 1.7 Using Matrices
