@@ -96,6 +96,44 @@ the variables they point to. In order to access the value of a pointer, you must
 you use the -> symbol (i.e. object->print_info()). This is the same thing as saying (*object).print_info(), however the -> symbol improves readability
 (syntaxic sugar). Another operator that can return a memory location is the & operator, also known as a reference.
 ## Lvalues, Rvalues, and References
+In C++, every value is either an lvalue or an rvalue. An lvalue is basically something you can take the address of. It refers to an actual object in memory. 
+For example, if you have a variable with a name like str, x, y, or arr, that’s an lvalue. Even expressions like *ptr or arr[x] are lvalues, because they refer 
+to a real location in memory. Rvalues are the opposite they’re temporary values, like literals (2, "foo"), or expressions that return a value but don’t refer 
+to anything with a name (x + y, str.substr(0,1)). These temporaries don’t have a real place in memory after the statement is done, and you can’t assign to them or take their address. 
+Most of the time, if it’s a named variable, it’s an lvalue. If it’s a throwaway value used during a calculation, it’s an rvalue.
+References are just alternative names for values. In regular C++, references use & and can only refer to lvalues, meaning they need to be bound to something that exists. 
+So string& r = str; works, but string& r = str + ""; doesn’t, because str + "" is a temporary. If C++ allowed that, you'd end up with a reference to a value that disappears immediately. 
+Starting in C++11, there's also &&, which is used for rvalue references. These let you bind to temporaries on purpose. So string&& s = str + ""; is fine. Now you’ve got a reference to a value that 
+normally wouldn’t be accessible after the line finishes running. This whole rvalue reference thing mainly exists to help optimize performance by letting you "steal" resources instead of copying them.
+There are a few clean uses for lvalue references in everyday code. One is when you want to shorten a long expression. For example, if you’re working with
+something like theLists[myhash(x, theLists.size())], writing that over and over is annoying and wasteful. So you just do auto& whichList = theLists[...] 
+once and reuse whichList. If you used plain auto instead of auto&, you’d be working with a copy and your changes wouldn’t do anything. Another common use 
+is in range-based for loops. If you say for (auto x : arr), you’re just copying each item in the array and modifying the copy, which does nothing. But if you say for (auto& x : arr), 
+now x is a real reference to each value in the array and changes will stick. The third big use is avoiding copies from function calls. If you call auto x = findMax(arr);, 
+and findMax returns a big object, you’re copying the whole thing. If all you need to do is read from it, you can just say auto& x = findMax(arr); instead and avoid the copy. You do need findMax to 
+return a reference for this to work, though. That’s pretty much it for references in this context  it’s all about avoiding unnecessary work and making your code cleaner.
+## Parameter Passing
+There are different ways to pass parameters in C++. The most common way, and the way a lot of other languages do it is call by value. The variable is directly called into the function
+(i.e. f(x)). However, this is not always efficient or right. Call by value is only appropriate for small objects that do not need to be altered by the function, such as finding the 
+product of two ints. However, when you get to functions that do alter the variables such as swap() for example, this does not work. This is the case where we call by reference. If you plan
+to alter any sort of values that need to be passed to the function, they must be called by reference. Another case of calling by reference is with bigger objects. If I wanted to find the 
+minimum value of an int array, I would need to pass that into a function that may look like min(int arr[], size). However, this uses a lot of memory the bigger the array is, as the function will
+make a copy of that array. In order to not take up as much memory, you pass in bigger object by call by const reference, so that the program does not need to make a copy of them. In C++11 there 
+is a fourth way to pass parameters known as call by rvalue reference, where you pass in an rvalue into the function to do a *move* rather than a *copy*. This lets the caller choose what type of
+value will be passed to the function, assuming there is appropriate overload, of course.
+## Return Passing
+Just like there are different ways to pass parameters, there are also different ways to return values from a function in C++. The first and most common way is return by value, which makes a copy
+of the result of a function, then returns it to the caller. For small objects like int or double, this is fine, however, for an object that takes up much more memory, this is not ideal, so in C+11
+and later, the compiler applies move semantics, which in short is just transferring the result, instead of copying it, by moving a pointer. There's also another way to return a value, and it is 
+known as return by constant reference, where the function a reference to an object that already exists in memory, like an element of a vector. This avoids copying entirely, but you have to be careful: 
+the reference must stay valid after the function returns. This only works when you're returning something that still exists, like an element in a parameter that was passed in. The tradeoff is that
+the caller also has to bind it to a const& to avoid triggering a copy. So even if the function returns a reference, you’ll still get a copy if you assign it to a regular variable instead of a reference.
+In older C++, returning large objects by value usually meant writing weird workarounds like passing pointers or extra arguments just to avoid copies. But now, in C++11 and up, the compiler can automatically
+move the return value. So you can return something like a vector directly from a function without worrying about performance. As long as it’s a temporary object, the compiler will optimize the move
+behind the scenes. Lastly, there’s return-by-reference (not const), which means the function gives the caller a modifiable reference to something inside the function — usually a private data member in a class. 
+This should be used sparingly and carefully, since it exposes the internal state and lets the caller change it directly. That use case shows up more when building custom data structures or container classes, 
+like a matrix implementation.
+## std::swap and std::move
 
 # 1.6 Templates
 # 1.7 Using Matrices
