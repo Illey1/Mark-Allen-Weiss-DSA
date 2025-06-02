@@ -83,5 +83,19 @@ from including a second header file. In the implementation, the header file must
 In the implementation file, the scope resolution operator is included in function definitions in order to specify which class it is a part of. 
 The function signatures must also match exactly, including name, parameters, and return type, in order for the member function to be properly implemented.
 # 1.5 C++ Details
+## Pointers
+Pointer variables store the addresses of the objects they point to. To declare a pointer, you use the * symbol. For example, to declare a
+pointer to an object, you would do " object* x". This, however, causes x to be uninitialized. To give it a value, you use the *new* keyword, which 
+returns a pointer to the newly created object: "object* x = new object;". There are varying syntaxes for the zero parameter constructor, but this is
+the most common practice. For every *new* there must be a *delete*. In other programming languages, there is automatic garbage collection for when
+an object is no longer referenced, however, in C++, this is not the case. When you dynamically allocate an object using new, you must call delete. 
+If you do not, the memory that was allocated for that object will not be freed for other use in the program causing memory leaks. For smaller programs, this is
+not normally a problem that is evident, however, as programs get bigger and bigger and take up more memory, these memory leaks cause crashes and other
+undefined behavior. When you call assingment or comparison operators on pointers, it applies to the memory address hold, not the values of
+the variables they point to. In order to access the value of a pointer, you must *dereference* it using the "*" symbol. To call a function on a pointer,
+you use the -> symbol (i.e. object->print_info()). This is the same thing as saying (*object).print_info(), however the -> symbol improves readability
+(syntaxic sugar). Another operator that can return a memory location is the & operator, also known as a reference.
+## Lvalues, Rvalues, and References
+
 # 1.6 Templates
 # 1.7 Using Matrices
