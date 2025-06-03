@@ -134,6 +134,24 @@ behind the scenes. Lastly, there’s return-by-reference (not const), which mean
 This should be used sparingly and carefully, since it exposes the internal state and lets the caller change it directly. That use case shows up more when building custom data structures or container classes, 
 like a matrix implementation.
 ## std::swap and std::move
+Alot of the previous sections have talked about moving as a replacement for copying, and another good example of this is with swap(). The basic algorithm for a swap between two values 
+is to make a temporary variable, store the first value in that variable, set the first value to the second value, then finally set the second value to the temporary variable. It looks something
+like this:  
+int swap(double& x, double& y) {
+double temp = x;
+x = y;
+y = temp;
+}  
+This is alright until you have bigger objects being swapped. Then you have to make a whole copy of that object. If x and y were instead a vector, this copy would be very expensive. So instead of copies
+we can do moves. The problem here, however, is that x and y are lvalues. They cannot be moved, only copied. For this, the std::move() can be used which essentially tells the compiler to treat a
+certain value like an rvalue. So instead of copying temp into x and then back again, you would write  
+int swap(double& x, double& y) {
+double temp = std::move(x);
+x = std::move(y);
+y = std::move(temp);
+}  
+Under the hood, swap() is just a type cast that converts an lvalue to an rvalue. This allows for more efficient swaps with objects that might take up more memory.
+## The Big-Five: Destructor, Copy Constructor, Move Constructor, Copy Assignment operator=, Move Assignment operator=
 
 # 1.6 Templates
 # 1.7 Using Matrices
