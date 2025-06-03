@@ -170,6 +170,17 @@ make a clone or a *deep copy*, but will instead create a shallow copy, which mak
 the big 5 will be implemented manually. This removes the defaults, making the programmer implement all five. If you do not want a certain one, say the copy assignment
 operator, you can use *Object& operator=(Object && rhs) = delete* to explicitly disallow this.
 ### C-style Arrays and Strings
-
+C++ includes built-in support for C-style arrays, but they’re pretty low-level and come with a lot of issues. When you write int arr1[10];, 
+you're creating an array of 10 integers, but what you're really getting is a constant pointer to a block of memory. It's not a real object like a vector.
+You can’t assign arrays with arr1 = otherArray; because you're trying to assign to a pointer that can't change. Also, when you pass arr1 into a function, 
+you're only passing the pointer, not the whole array. That means the function has no idea how big the array is, so you always have to pass the size separately. 
+On top of that, there's no index checking, so if you go out of bounds, it's on you to catch it. Another issue is that the size must be known at compile time. 
+You can’t write int arr[n]; if n is a variable. If you want a dynamic array, you have to manually allocate memory like this: int* arr2 = new int[n];. This works,
+but since you used new, you also have to call delete[] arr2; when you're done. If you forget, you leak memory, and the leak can be huge if the array is large. 
+C-style strings are just arrays of characters. To tell where the string ends, they use a special character called the null terminator ('\0'). Functions like strlen, 
+strcpy, and strcmp are used to deal with these strings. But again, they have no safety built in. If you try to copy a string into an array that’s too small, or you 
+forget space for the null terminator, your program might crash or behave unpredictably. Modern C++ gives you std::vector and std::string so you don’t have to deal
+with all this directly. These classes wrap around dynamic memory and handle everything for you. They're safer, cleaner, and way easier to work with. Unless you're 
+dealing with C libraries or extremely performance-sensitive code, you should always use vector and string instead of the C-style versions.
 # 1.6 Templates
 # 1.7 Using Matrices
