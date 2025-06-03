@@ -152,6 +152,24 @@ y = std::move(temp);
 }  
 Under the hood, swap() is just a type cast that converts an lvalue to an rvalue. This allows for more efficient swaps with objects that might take up more memory.
 ## The Big-Five: Destructor, Copy Constructor, Move Constructor, Copy Assignment operator=, Move Assignment operator=
+### Destructor
+The destructor is called whenever an object goes out of scope. It frees up any memory that were taken up by the use of the object. The default constructor applies this 
+to every data member.
+### Copy and Move Constructors
+To create a new object initialized to the same state as another object, the copy and move constructors are called. As any other object, copy is for lhand and move is for
+rhand values. A copy or move constructor can be called when another object is being initialized (Object B = C; <- NOT THE SAME AS B = C), when an object is passed into a function
+using call-by-value, and if an object is returned by value. Copy constructors, by default, are implemented by applying copy constructors to each data member of the object being copied.
+### Copy *Assignment* and Move *Assignment* (operator=)
+This is similar, but not the same as the constructors, as now the operator is being applied to objects that have already been previously constructed. Like the 
+traditional assignment operator, it is simply *lhs*=*rhs*. If rhs is an lvalue, then the copy assignment operator is applied, and if rhs is an rvalue, then the
+move assignment operator is applied. Similar to the constructors, this is done by applying these operators on the data members themselves.
+### Defaults
+The defaults of the big five are not always acceptable. If a pointer data member is declared with the *new* keyword, it must also be deleted. The default destructor does
+not do this, and in turn, this causes a memory leak. Also, if the copy constructor or copy assignment operator copies the value of that data member, it will not 
+make a clone or a *deep copy*, but will instead create a shallow copy, which makes two instances of a class that point to the same object. To solve this problem,
+the big 5 will be implemented manually. This removes the defaults, making the programmer implement all five. If you do not want a certain one, say the copy assignment
+operator, you can use *Object& operator=(Object && rhs) = delete* to explicitly disallow this.
+### C-style Arrays and Strings
 
 # 1.6 Templates
 # 1.7 Using Matrices
