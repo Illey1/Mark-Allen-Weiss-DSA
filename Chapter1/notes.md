@@ -183,4 +183,33 @@ forget space for the null terminator, your program might crash or behave unpredi
 with all this directly. These classes wrap around dynamic memory and handle everything for you. They're safer, cleaner, and way easier to work with. Unless you're 
 dealing with C libraries or extremely performance-sensitive code, you should always use vector and string instead of the C-style versions.
 # 1.6 Templates
+It's preferred to write algorithms that are type independent, as to avoid writing redundant code for each data type.
+## Function Templates
+Function templates are not actual functions, but patterns for what could be a function. You declare a function as a function template by writing template<typename something>, 
+where something is your template argument. In this case, something can be replaced by any type to generate a function. For example if I had a function  
+template<typename T>  
+const T & foo(const vector<T> & x) {}  
+then I am able to call foo on a vector<int>, vector<string>, vector<user_defined_object>, etc. However, every time you use a new type on the template, the compiler will generate
+a whole new version of the function for that type. If the function is called on many different types, this leads to code bloat. For template functions, it is common to include 
+comments about the assumptions about what type of constructors, destructors, or operators the type must have to avoid compile-time errors from trying to use a type that is not 
+supported by the template function. Also, most if not all template functions will assume that the types are not primitive data-types, meaning that a constant reference is to be 
+used to avoid expensive copies. Templates can get tricky when the compiler tries to figure out which version of a function to call. If a non-template version and a template both
+match, the non-template wins. If two templates are both "close enough," but neither is a perfect match, the compiler just gives up and throws an ambiguity error. So while 
+templates are powerful, they come with a lot of compiler rules that can get pretty weird if you're not careful.
+## Class Templates
+Class templates work like function templates. Instead of writing a separate class for each data type, you can write one template that works for any type. In the example, 
+MemoryCell is a class template that acts like a simple container. It stores a value and lets you read or write it. Instead of being limited to just int like IntCell was, it 
+can store any type, like MemoryCell<int> or MemoryCell<string>. The template uses Object as a placeholder for the type. When you create a MemoryCell<int>, the compiler 
+replaces Object with int everywhere inside the class. The constructor takes a const Object& as a parameter and sets the stored value. If you don’t pass anything in, it 
+defaults to Object{}, meaning it calls the default constructor for that type. This is safer than using 0, since 0 might not make sense for something like a string or custom class.
+Inside the MemoryCell, the stored value is kept private, and you interact with it using the read and write functions. Read returns a constant reference so you don't accidentally 
+modify the value, and write takes a constant reference to avoid unnecessary copies. Also, class templates are usually implemented entirely in header files. This is because 
+many compilers don’t handle separating the implementation into a .cpp file very well. So instead of splitting the class into a header and source file, most template classes 
+just keep everything in one .h file. That’s how the STL is written too. You can separate them if you really want to, but it adds extra syntax and tends to be annoying, 
+which is why most people don’t bother unless they have to.
+## Object, Comparable, and an Example
+Example of how to make templates work with generic code.
+## Function Objects
+
+## Seperate Compilation of Class Templates
 # 1.7 Using Matrices
