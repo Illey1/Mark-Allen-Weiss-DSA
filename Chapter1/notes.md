@@ -210,6 +210,11 @@ which is why most people don’t bother unless they have to.
 ## Object, Comparable, and an Example
 Example of how to make templates work with generic code.
 ## Function Objects
-
+a generic function template like findMax typically works only if the type being compared defines operator<, but this can be limiting when working with custom types or when 
+the desired comparison is different from the default. For example, comparing rectangles by area or strings in a case-insensitive way cannot rely on operator< alone. To make 
+findMax more flexible, you can pass a separate comparison function that specifies how to compare two objects. Instead of using a plain function pointer, which is less efficient 
+and cannot carry state, C++ commonly uses a function object, also called a functor, which is simply a class or struct with a operator() defined. This allows the compiler to inline calls, 
+supports stateful comparisons, integrates with templates more easily, and aligns with STL conventions.
 ## Seperate Compilation of Class Templates
+Compiler support for seperate compilation of template classes has been weak, which is why it is common practice to put the implementation along with the interface in one file, to avoid this.
 # 1.7 Using Matrices
