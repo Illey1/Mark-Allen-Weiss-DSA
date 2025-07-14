@@ -218,3 +218,16 @@ supports stateful comparisons, integrates with templates more easily, and aligns
 ## Seperate Compilation of Class Templates
 Compiler support for seperate compilation of template classes has been weak, which is why it is common practice to put the implementation along with the interface in one file, to avoid this.
 # 1.7 Using Matrices
+## The Data Members, Constructor, and Basic Accessors
+As a class, a matrix can be represented by one data member: a vector of vectors. The constructor takes in the rows and columns, then uses an initializer list to use the number of rows to initialize
+the vector. Then, within each index of the vector, which are vectors, the index is set to however many columns there are by calling std::resize. You then have an empty array. Of course, the [] operator,
+used for index access must be overloaded as well, as arrays are accessed not just by a single index, but by two, the row and column.
+## Operator []
+Overloading the [] operator allows for accessing each index in the singular data member of the matrix object. In order to access the index of the index, as each index
+is a vector as stated earlier, we must allow calls like  
+matrix[5][6]  
+hence the overloaded operator returns a vector. You'll notice that there are two overloads for the operator. One returns a const reference and one returns a reference. This is because we want to 
+be able to assign values without having to copy while also allowing assignments between matrices. Normally, this double return type for one function signature is not allowed in C++, however, since 
+having accessors and mutators inside of classes marked with const or not marked with const is allowed, this works.
+## Big-Five
+The code for the "big-five" is not as long or complicated as expected, as a lot of that is handled in the std::vector implementation itself.
